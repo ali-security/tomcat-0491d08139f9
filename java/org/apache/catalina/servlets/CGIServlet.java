@@ -1528,14 +1528,12 @@ public final class CGIServlet extends HttpServlet {
                 rt = Runtime.getRuntime();
                 proc = rt.exec(cmdAndArgs.toArray(new String[0]), mapToStringArray(env), wd);
 
-                String sContentLength = env.get("CONTENT_LENGTH");
-
-                if (!"".equals(sContentLength)) {
-                    commandsStdIn = new BufferedOutputStream(proc.getOutputStream());
+                commandsStdIn = new BufferedOutputStream(proc.getOutputStream());
+                if (stdin != null) {
                     IOTools.flow(stdin, commandsStdIn);
-                    commandsStdIn.flush();
-                    commandsStdIn.close();
                 }
+                commandsStdIn.close();
+                commandsStdIn = null;
 
                 /*
                  * we want to wait for the process to exit, Process.waitFor() is useless in our situation; see
@@ -1636,6 +1634,13 @@ public final class CGIServlet extends HttpServlet {
                         cgiOutput.close();
                     } catch (IOException ioe) {
                         log.warn(sm.getString("cgiServlet.runOutputStreamFail"), ioe);
+                    }
+                }
+                if (commandsStdIn != null) {
+                    try {
+                        commandsStdIn.close();
+                    } catch (IOException ioe) {
+                        log.warn(sm.getString("cgiServlet.commandsStdInFail"), ioe);
                     }
                 }
                 // Make sure the error stream reader has finished
