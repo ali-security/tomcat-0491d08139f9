@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -556,7 +555,7 @@ public class RewriteValve extends ValveBase {
                         // This is decoded and normalized
                         chunk.append(request.getServletContext().getContextPath());
                     }
-                    chunk.append(URLDecoder.decode(urlStringRewriteEncoded, uriCharset));
+                    chunk.append(UDecoder.URLDecode(urlStringRewriteEncoded, uriCharset));
                     // Set the new Query if there is one
                     if (queryStringRewriteEncoded != null) {
                         request.getCoyoteRequest().queryString().setChars(MessageBytes.EMPTY_CHAR_ARRAY, 0, 0);
