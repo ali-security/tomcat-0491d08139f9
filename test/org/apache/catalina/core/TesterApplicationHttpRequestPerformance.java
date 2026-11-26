@@ -31,7 +31,7 @@ public class TesterApplicationHttpRequestPerformance {
         org.apache.coyote.Request coyoteRequest = new org.apache.coyote.Request();
         Request request = new Request(null);
         request.setCoyoteRequest(coyoteRequest);
-        ApplicationHttpRequest applicationHttpRequest = new ApplicationHttpRequest(request, null ,false);
+        ApplicationHttpRequest applicationHttpRequest = new ApplicationHttpRequest(request, null ,false, null);
 
         // Warm-up
         doTestGetAttribute(applicationHttpRequest);
